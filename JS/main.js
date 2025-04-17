@@ -1,7 +1,7 @@
-const main = document.getElementsByTagName("main").item(0);
+// const main = document.getElementsByTagName("main").item(0);
 const URLmain = "https://fakestoreapi.com/products/";
 const ulMenu = document.getElementById("ulMenu");
-let prodMain = document.getElementById("prodMain");
+const prod = document.getElementById("prod");
 
 function getData(cat) {
     const options = {"method": "GET"};
@@ -12,7 +12,7 @@ function getData(cat) {
             // console.log(res.lenght);
             // console.log(res[12].title);
             createCards(res);
-        }); // cierre del segundo then donde manda a trar la info del array en cuanto a longitud y datos específicos si se le solicitan.
+        }); // cierre del segundo then donde manda a traer la info del array en cuanto a longitud y datos específicos si se le solicitan.
     }) // cierre then
     .catch((err) => {
         main.insertAdjacentHTML("beforeend",
@@ -23,14 +23,13 @@ function getData(cat) {
 } // getData
 
 function getCategories() {
-    const options = {"method": "GET"};
-    fetch(URLmain+"categories/", options)
+    fetch(URLmain+"categories/")
     .then((response) => {
+        console.log(response)
         response.json().then((res) => {
-            console.log("categories: ", res);
             res.forEach((cat) => {
                 ulMenu.insertAdjacentHTML("afterbegin",
-                    `<li><a class="dropdown-item" onclick="getData('category/${cat}');">${cat}</a></li>`
+                    `<li><a class="dropdown-item" onclick="getData('category/${cat}')" href="#">${cat}</a></li>`
             )});
         }); // cierre del segundo then donde manda a trar la info del array en cuanto a longitud y datos específicos si se le solicitan.
     }) // cierre then
@@ -46,22 +45,19 @@ getCategories();
 getData("");
 
 function createCards(prods) {
-    let i = 0; // variable
-    do {
-        prodMain.insertAdjacentHTML("beforeend",
-            `<div class="card mb-3" style="width: 430px; height: 400px">
-    <div class="row g-0">
-    <div class="col-md-4">
-      <img src="${prods[i].image}" class="img-fluid rounded-start" alt="${prods[i].title}" style="object-fit:container">
-    </div>
-    <div class="col-md-4">
-      <div class="card-body">
-        <h6 class="card-title">${prods[i].title}</h6>
-        <p class="card-text">${prods[i].description.slice(0, 40)}</p>
-        <p class="card-text"><small class="text-body-secondary">$${prods[i].price}</small></p>
-      </div>
-    </div>
-    </div>
-    </div>`); i++ 
-    } while (i <= 19); 
+    prod.innerHTML="";
+    let i = 0
+    do{
+        prod.insertAdjacentHTML("beforeend",
+        `
+        <div class="card" style="width: 18rem col-3" >
+               <img src="${prods[i].image}" class="card-img-top" alt="${prods[i].title}">
+           <div class="card-body">
+             <h5 class="card-title">${prods[i].title}</h5>
+             <p class="card-text">${prods[i].description}</p>
+             <a href="#" class="btn btn-primary" id=${i}>Go somewhere</a>
+           </div>
+         </div>`);
+        i++
+    } while (i <= 19);
 }
